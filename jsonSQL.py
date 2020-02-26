@@ -1,8 +1,10 @@
 import sys
-import re
 import json
 import os
-import mysql.connector
+
+#Aaron Fye
+#Feb 26 2020
+#A program to take a file system, take the names then open a JSON file in each folder, then convert that json to SQL statements.
 
 def getListOfFiles(dirName):
     # Taken from online somewhere.
@@ -62,8 +64,23 @@ def makeSQL():
     # Set up an ID system.
     id = 0
 
-    #Sorry, this one is hard coded to the number of file I had at the time.
-    for x in range(1, 2287):
+    #Number of lines var
+    mL = 0
+
+    #Loops for lines in the file.
+    for lines in manga:
+
+        #add one to the amount of lines.
+        mL = mL + 1
+
+    #Close it, because that makes it work. lol
+    manga.close()
+
+    # Open it back up!
+    manga = open("Names.txt", "r")
+
+    #Loop fo the number of files you need.
+    for x in range(0, mL):
             #Get the name of the manga.
             name = manga.readline()
 

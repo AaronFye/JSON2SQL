@@ -6,6 +6,13 @@ import os
 #Feb 26 2020
 #A program to take a file system, take the names then open a JSON file in each folder, then convert that json to SQL statements.
 
+print('Where are the folders located?')
+# This is where the folders are.
+dirName = input()
+
+print("what is the name of the table in the database?")
+dbName = input()
+
 def getListOfFiles(dirName):
     # Taken from online somewhere.
 
@@ -25,12 +32,13 @@ def getListOfFiles(dirName):
 
     return allFiles
 
-def getTitles():
+def getTitles(dirName):
+
+    print("How far down the list is the location?")
+    fileLoc = int(input())
+
     #Make a new file for use a but later
     sys.stdout = open('Names.txt', 'wt')
-
-    #This is where the folders are.
-    dirName = 'C:\\Users\\aaron\\PycharmProjects\\autoDB\\manga\\'
 
     # Get the list of all files in directory tree at given path
     listOfFiles = getListOfFiles(dirName)
@@ -48,9 +56,9 @@ def getTitles():
             data = elem.split("\\")
 
             # write the names of each folder down. (It is the 7th element in the file path.)
-            print(data[6])
+            print(data[fileLoc])
 
-def makeSQL():
+def makeSQL(dirname):
 
     # Make a file to store the sql statements. Not needed if I could figure out how to use sql in python. lol
     sys.stdout = open('database.sql', 'wt', encoding="utf_8")
@@ -91,7 +99,7 @@ def makeSQL():
             name = name[0:-1]
 
             #Open the file it was looking for.
-            fo = open('C:\\Users\\aaron\PycharmProjects\\autoDB\\manga\\' + name + '\\index.json', 'r', encoding="utf_8", errors="ignore")
+            fo = open(dirName + "\\" + name + '\\index.json', 'r', encoding="utf_8", errors="ignore")
 
             #Get the data from it.
             data = fo.read()
@@ -133,21 +141,21 @@ def makeSQL():
             #Sometimes the group, collection, and/or description were null, so we needed to filter them out.
             #Then, we print a formed SQL statement into the file.
             if type(group) != type(author) and type(coll) != type(author) and type(desc) != type(author):
-                print("INSERT INTO manga (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + "Unknown" + "\", \"" + date + "\", \"" + "Unknown" + "\", \"" + "Unknown" + "\", \"" + title + "\", \"" + tags + "\");")
+                print("INSERT INTO "+ dbName +" (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + "Unknown" + "\", \"" + date + "\", \"" + "Unknown" + "\", \"" + "Unknown" + "\", \"" + title + "\", \"" + tags + "\");")
             if type(group) != type(author) and type(coll) != type(author) and type(desc) == type(author):
-                print("INSERT INTO manga (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + "Unknown" + "\", \"" + date + "\", \"" + desc + "\", \"" + "Unknown" + "\", \"" + title + "\", \"" + tags + "\");")
+                print("INSERT INTO "+ dbName +" (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + "Unknown" + "\", \"" + date + "\", \"" + desc + "\", \"" + "Unknown" + "\", \"" + title + "\", \"" + tags + "\");")
             if type(group) != type(author) and type(coll) == type(author) and type(desc) != type(author):
-                print("INSERT INTO manga (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + coll + "\", \"" + date + "\", \"" + "Unknown" + "\", \"" + "Unknown" + "\", \"" + title + "\", \"" + tags + "\");")
+                print("INSERT INTO "+ dbName +" (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + coll + "\", \"" + date + "\", \"" + "Unknown" + "\", \"" + "Unknown" + "\", \"" + title + "\", \"" + tags + "\");")
             if type(group) != type(author) and type(coll) == type(author) and type(desc) == type(author):
-                print("INSERT INTO manga (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + coll + "\", \"" + date + "\", \"" + desc + "\", \"" + "Unknown" + "\", \"" + title + "\", \"" + tags + "\");")
+                print("INSERT INTO "+ dbName +" (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + coll + "\", \"" + date + "\", \"" + desc + "\", \"" + "Unknown" + "\", \"" + title + "\", \"" + tags + "\");")
             if type(group) == type(author) and type(coll) != type(author) and type(desc) != type(author):
-                print("INSERT INTO manga (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + "Unknown" + "\", \"" + date + "\", \"" + "Unknown" + "\", \"" + group + "\", \"" + title + "\", \"" + tags + "\");")
+                print("INSERT INTO "+ dbName +" (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + "Unknown" + "\", \"" + date + "\", \"" + "Unknown" + "\", \"" + group + "\", \"" + title + "\", \"" + tags + "\");")
             if type(group) == type(author) and type(coll) != type(author) and type(desc) == type(author):
-                print("INSERT INTO manga (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + "Unknown" + "\", \"" + date + "\", \"" + desc + "\", \"" + group + "\", \"" + title + "\", \"" + tags + "\");")
+                print("INSERT INTO "+ dbName +" (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + "Unknown" + "\", \"" + date + "\", \"" + desc + "\", \"" + group + "\", \"" + title + "\", \"" + tags + "\");")
             if type(group) == type(author) and type(coll) == type(author) and type(desc) != type(author):
-                print("INSERT INTO manga (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + coll + "\", \"" + date + "\", \"" + "Unknown" + "\", \"" + group + "\", \"" + title + "\", \"" + tags + "\");")
+                print("INSERT INTO "+ dbName +" (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + coll + "\", \"" + date + "\", \"" + "Unknown" + "\", \"" + group + "\", \"" + title + "\", \"" + tags + "\");")
             if type(group) == type(author) and type(coll) == type(author) and type(desc) == type(author):
-                print("INSERT INTO manga (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + coll + "\", \"" + date + "\", \"" + desc + "\", \"" + group + "\", \"" + title + "\", \"" + tags + "\");")
+                print("INSERT INTO "+ dbName +" (mID, mAuthor, mCollection, mDate, mDesc, mGroup, mName, mTags) VALUES (" + mID + ", \"" + author + "\", \"" + coll + "\", \"" + date + "\", \"" + desc + "\", \"" + group + "\", \"" + title + "\", \"" + tags + "\");")
 
     #Close the files.
     manga.close()
@@ -155,10 +163,10 @@ def makeSQL():
 def main():
 
     #Get the title.
-    getTitles()
+    getTitles(dirName)
 
     #Turn them into SQL
-    makeSQL()
+    makeSQL(dirName)
 
 
 if __name__ == '__main__':
